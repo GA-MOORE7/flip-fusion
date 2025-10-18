@@ -1,0 +1,126 @@
+/* Make wrapper take full viewport height and split into 2 halves */
+#wrapper {
+  display: flex;
+  height: 100vh; /* full screen height */
+  width: 100vw;  /* full screen width */
+}
+
+/* Left panel */
+#frameContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e7f3fb;
+}
+
+/* Right panel */
+#croppingContainer {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column; /* stack elements vertically */
+  justify-content: center; /* center vertically */
+  align-items: center; /* center horizontally */
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.frame {
+  height: 200px;
+  width: 200px;
+  border: 3px dashed #333;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 70px;
+  transition: all 0.2s;
+  
+  /* Pulse animation */
+  animation: pulseBorder 1.5s infinite;
+}
+
+@keyframes pulseBorder {
+  0%, 100% {
+    transform: scale(1);
+    border-color: #333;
+  }
+  50% {
+    transform: scale(1.05);
+    border-color: #555; /* slightly brighter/darker for effect */
+  }
+}
+
+
+.frame:hover {
+  background-color: #8bbcc2;
+  cursor: pointer;
+}
+
+/* Croppie container (the main cropping interface) */
+#upload-demo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* image + slider stack vertically */
+  gap: 15px; /* space between image and slider */
+}
+
+/* Center the Croppie boundary (the image area) */
+.cr-boundary {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Croppie viewport (the circular/rectangular cropping area) */
+.cr-viewport {
+  margin: 0 auto;
+}
+
+/* Uploaded image (before croppie initializes) */
+#croppableImage {
+  max-width: 80%;
+  max-height: 60%; /* smaller height to leave room for slider */
+  border-radius: 10px;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+/* Croppie zoom slider styling */
+.cr-slider-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.cr-slider {
+  width: 200px; /* control slider width */
+}
+
+/* Floating animation */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.placeholder {
+  display: block;
+  max-width: 80%;
+  max-height: 300px;
+  margin: 0 auto;
+  border-radius: 10px;
+  animation: float 2s ease-in-out infinite;
+  transition: opacity 0.3s;
+}
+
+
+
+
+
+

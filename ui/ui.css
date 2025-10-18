@@ -1,0 +1,73 @@
+/* Reset and layout setup */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+/* Center the toggle bar at the top */
+.toggle-wrapper {
+  position: fixed; /* stays at the top even if page scrolls */
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  width: 600px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* Toggle buttons */
+.toggle-btn {
+  flex: 1;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.toggle-btn.active {
+  color: white;
+}
+
+/* Active button colors */
+#toggle-btn-1.active { background-color: #499fa4; }
+#toggle-btn-2.active { background-color: #E9BC8B; }
+#toggle-btn-3.active { background-color: #3D4A55; }
+
+/* Sliding background */
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 33.33%;
+  height: 100%;
+  background-color: white;
+  border-radius: 8px;
+  transition: left 0.3s, background-color 0.3s;
+  z-index: 0;
+}
+
+/* Center pages perfectly */
+.main-pages {
+  height: 100vh; /* full viewport */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page {
+  display: none;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.page.active {
+  display: block;
+}
