@@ -36,7 +36,7 @@ function displaySavedItems(savedItems) {
     const th = document.createElement("th");
     th.textContent = text;
     th.style.padding = "10px";
-    th.style.backgroundColor = "#c5ecf6";
+    th.style.backgroundColor = "#6dece2ff";
     th.style.borderBottom = "2px solid #ddd";
     header.appendChild(th);
   });
