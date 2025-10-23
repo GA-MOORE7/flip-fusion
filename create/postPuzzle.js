@@ -1,11 +1,14 @@
 export async function sendPuzzleToAPI(name, items) {
+  if (!name || !items || items.length === 0) {
+    alert("Please provide a puzzle name and at least one item.");
+    return;
+  }
+
   try {
     const response = await fetch("http://localhost:3000/api/puzzles", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ name, items })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, items }) // items = savedItems
     });
 
     const contentType = response.headers.get("content-type");
@@ -22,15 +25,13 @@ export async function sendPuzzleToAPI(name, items) {
       throw new Error(errorMessage);
     }
 
-    let data;
-    if (contentType && contentType.includes("application/json")) {
-      data = await response.json();
-      console.log("Puzzle saved successfully:", data);
-      alert("Puzzle saved successfully!");
-    } else {
-      const text = await response.text();
-      console.log("Server returned non-JSON response:", text);
-    }
+    // Parse response JSON
+    const data = contentType && contentType.includes("application/json")
+      ? await response.json()
+      : null;
+
+    console.log("Puzzle saved successfully:", data);
+    alert("Puzzle saved successfully!");
 
     return data;
   } catch (err) {
@@ -39,3 +40,4 @@ export async function sendPuzzleToAPI(name, items) {
     throw err;
   }
 }
+
