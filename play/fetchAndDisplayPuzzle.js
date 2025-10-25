@@ -17,7 +17,7 @@ export async function fetchAndDisplayPuzzles() {
       return;
     }
 
-    // Clear existing content before re-rendering (important for auto-refresh)
+    // Clear existing content before re-rendering
     tableContainer.innerHTML = "";
 
     // Create table
@@ -45,18 +45,14 @@ export async function fetchAndDisplayPuzzles() {
     puzzles.forEach((puzzle) => {
       const row = document.createElement("tr");
 
-      // ----------------------------
       // Name
-      // ----------------------------
       const nameCell = document.createElement("td");
       nameCell.textContent = puzzle.name;
       nameCell.style.border = "1px solid #ccc";
       nameCell.style.padding = "8px";
       row.appendChild(nameCell);
 
-      // ----------------------------
-      // Preview (images + words)
-      // ----------------------------
+      // Preview
       const previewCell = document.createElement("td");
       previewCell.style.border = "1px solid #ccc";
       previewCell.style.padding = "8px";
@@ -73,7 +69,7 @@ export async function fetchAndDisplayPuzzles() {
         itemWrapper.style.textAlign = "center";
 
         const img = document.createElement("img");
-        img.src = item.imageUrl || item.image; // fallback for local/base64 data
+        img.src = item.imageUrl || item.image;
         img.alt = item.word;
         img.style.width = "60px";
         img.style.height = "60px";
@@ -95,9 +91,7 @@ export async function fetchAndDisplayPuzzles() {
 
       row.appendChild(previewCell);
 
-      // ----------------------------
       // Action button
-      // ----------------------------
       const actionCell = document.createElement("td");
       actionCell.style.border = "1px solid #ccc";
       actionCell.style.padding = "8px";
@@ -116,11 +110,22 @@ export async function fetchAndDisplayPuzzles() {
         playBtn.style.backgroundColor = "#b6f7dbff";
       });
 
-      playBtn.addEventListener("click", () => {
-      
+      // ✅ Updated click handler
+      playBtn.addEventListener("click", async () => {
+        // 1️⃣ Show the lightbox immediately
         showLightbox();
 
-        // Future: redirect to /play?puzzleId=... or trigger your game logic
+        // 2️⃣ Fetch the puzzle data by ID
+        try {
+          const res = await fetch(`http://localhost:3000/api/puzzles/${puzzle._id}`);
+          if (!res.ok) throw new Error("Failed to fetch puzzle");
+          const puzzleData = await res.json();
+
+          // 3️⃣ Log the puzzle data
+          console.log("Puzzle data retrieved:", puzzleData);
+        } catch (err) {
+          console.error("Error fetching puzzle:", err);
+        }
       });
 
       actionCell.appendChild(playBtn);
@@ -143,6 +148,7 @@ export async function fetchAndDisplayPuzzles() {
 document.addEventListener("DOMContentLoaded", () => {
   fetchAndDisplayPuzzles();
 });
+
 
 
 
