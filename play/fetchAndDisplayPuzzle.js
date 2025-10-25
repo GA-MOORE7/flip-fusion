@@ -1,3 +1,5 @@
+import { showLightbox } from "./showLightbox.js";
+
 // play/fetchAndDisplayPuzzle.js
 export async function fetchAndDisplayPuzzles() {
   const tableContainer = document.getElementById("page3"); // target your "Play" page
@@ -115,11 +117,9 @@ export async function fetchAndDisplayPuzzles() {
       });
 
       playBtn.addEventListener("click", () => {
-        alert(
-          `Puzzle: ${puzzle.name}\nWords: ${puzzle.items
-            .map((i) => i.word)
-            .join(", ")}`
-        );
+      
+        showLightbox();
+
         // Future: redirect to /play?puzzleId=... or trigger your game logic
       });
 
