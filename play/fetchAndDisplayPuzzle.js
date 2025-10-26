@@ -2,7 +2,7 @@ import { showLightbox } from "./showLightbox.js";
 
 // play/fetchAndDisplayPuzzle.js
 export async function fetchAndDisplayPuzzles() {
-  const tableContainer = document.getElementById("page3"); // target your "Play" page
+  const tableContainer = document.getElementById("page3");
   if (!tableContainer) return;
 
   try {
@@ -13,17 +13,23 @@ export async function fetchAndDisplayPuzzles() {
     if (puzzles.length === 0) {
       const p = document.createElement("p");
       p.textContent = "No puzzles available.";
+      p.style.textAlign = "center";
+      p.style.fontSize = "18px";
       tableContainer.appendChild(p);
       return;
     }
 
-    // Clear existing content before re-rendering
+    // Clear existing content
     tableContainer.innerHTML = "";
 
     // Create table
     const table = document.createElement("table");
     table.style.width = "100%";
-    table.style.borderCollapse = "collapse";
+    table.style.borderCollapse = "separate";
+    table.style.borderSpacing = "0";
+    table.style.borderRadius = "10px";
+    table.style.overflow = "hidden";
+    table.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
 
     // Header
     const thead = document.createElement("thead");
@@ -31,9 +37,12 @@ export async function fetchAndDisplayPuzzles() {
     ["Puzzle Name", "Preview", "Action"].forEach((text) => {
       const th = document.createElement("th");
       th.textContent = text;
-      th.style.border = "1px solid #ccc";
-      th.style.padding = "8px";
-      th.style.backgroundColor = "#f0f0f0";
+      th.style.borderBottom = "2px solid #ccc";
+      th.style.padding = "12px";
+      th.style.backgroundColor = "#f7f9fa";
+      th.style.fontSize = "16px";
+      th.style.fontWeight = "600";
+      th.style.color = "#333";
       headerRow.appendChild(th);
     });
     thead.appendChild(headerRow);
@@ -44,20 +53,22 @@ export async function fetchAndDisplayPuzzles() {
 
     puzzles.forEach((puzzle) => {
       const row = document.createElement("tr");
+      row.style.transition = "background 0.2s";
+      row.addEventListener("mouseenter", () => (row.style.backgroundColor = "#f0fdf9"));
+      row.addEventListener("mouseleave", () => (row.style.backgroundColor = "transparent"));
 
-      // Name
+      // Puzzle Name
       const nameCell = document.createElement("td");
       nameCell.textContent = puzzle.name;
-      nameCell.style.border = "1px solid #ccc";
-      nameCell.style.padding = "8px";
+      nameCell.style.padding = "10px";
+      nameCell.style.fontWeight = "500";
       row.appendChild(nameCell);
 
       // Preview
       const previewCell = document.createElement("td");
-      previewCell.style.border = "1px solid #ccc";
-      previewCell.style.padding = "8px";
+      previewCell.style.padding = "10px";
       previewCell.style.display = "flex";
-      previewCell.style.gap = "12px";
+      previewCell.style.gap = "10px";
       previewCell.style.flexWrap = "wrap";
 
       puzzle.items.slice(0, 3).forEach((item) => {
@@ -74,15 +85,16 @@ export async function fetchAndDisplayPuzzles() {
         img.style.width = "60px";
         img.style.height = "60px";
         img.style.objectFit = "cover";
-        img.style.borderRadius = "6px";
-        img.style.border = "1px solid #ccc";
+        img.style.borderRadius = "8px";
+        img.style.border = "1px solid #ddd";
+        img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
         img.onerror = () => (img.alt = item.word || "Image unavailable");
 
         const label = document.createElement("span");
         label.textContent = item.word;
-        label.style.marginTop = "4px";
+        label.style.marginTop = "6px";
         label.style.fontSize = "12px";
-        label.style.color = "#333";
+        label.style.color = "#555";
 
         itemWrapper.appendChild(img);
         itemWrapper.appendChild(label);
@@ -91,37 +103,32 @@ export async function fetchAndDisplayPuzzles() {
 
       row.appendChild(previewCell);
 
-      // Action button
+      // Action Button
       const actionCell = document.createElement("td");
-      actionCell.style.border = "1px solid #ccc";
-      actionCell.style.padding = "8px";
+      actionCell.style.padding = "10px";
 
       const playBtn = document.createElement("button");
       playBtn.textContent = "Play";
-      playBtn.style.padding = "5px 10px";
+      playBtn.style.padding = "6px 14px";
       playBtn.style.cursor = "pointer";
-      playBtn.style.backgroundColor = "#b6f7dbff";
+      playBtn.style.backgroundColor = "#4ade80";
+      playBtn.style.color = "#fff";
+      playBtn.style.fontWeight = "500";
       playBtn.style.borderRadius = "6px";
-      playBtn.style.border = "1px solid #88c";
-      playBtn.addEventListener("mouseenter", () => {
-        playBtn.style.backgroundColor = "#80f1b5ff";
-      });
-      playBtn.addEventListener("mouseleave", () => {
-        playBtn.style.backgroundColor = "#b6f7dbff";
-      });
+      playBtn.style.border = "none";
+      playBtn.style.transition = "background 0.2s";
+      playBtn.addEventListener("mouseenter", () => (playBtn.style.backgroundColor = "#16a34a"));
+      playBtn.addEventListener("mouseleave", () => (playBtn.style.backgroundColor = "#4ade80"));
 
-      // ✅ Updated click handler
       playBtn.addEventListener("click", async () => {
-        // 1️⃣ Show the lightbox immediately
+        // Show lightbox immediately
         showLightbox();
 
-        // 2️⃣ Fetch the puzzle data by ID
+        // Fetch the puzzle data
         try {
           const res = await fetch(`http://localhost:3000/api/puzzles/${puzzle._id}`);
           if (!res.ok) throw new Error("Failed to fetch puzzle");
           const puzzleData = await res.json();
-
-          // 3️⃣ Log the puzzle data
           console.log("Puzzle data retrieved:", puzzleData);
         } catch (err) {
           console.error("Error fetching puzzle:", err);
@@ -140,6 +147,8 @@ export async function fetchAndDisplayPuzzles() {
     console.error("Error fetching puzzles:", err);
     const p = document.createElement("p");
     p.textContent = "Error fetching puzzles: " + err.message;
+    p.style.textAlign = "center";
+    p.style.color = "#f00";
     tableContainer.appendChild(p);
   }
 }
@@ -148,6 +157,7 @@ export async function fetchAndDisplayPuzzles() {
 document.addEventListener("DOMContentLoaded", () => {
   fetchAndDisplayPuzzles();
 });
+
 
 
 
