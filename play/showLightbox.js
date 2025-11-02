@@ -18,7 +18,7 @@ export function showLightbox() {
   const lightbox = document.createElement("div");
   lightbox.classList.add("lightbox-content");
   lightbox.style.position = "relative"; // needed for absolute close button
-  lightbox.style.background = "#fff";
+  lightbox.style.background = "radial-gradient(circle, rgb(133, 208, 167), rgb(127, 212, 223), rgb(130, 154, 222))";
   lightbox.style.borderRadius = "0";
   lightbox.style.width = "100%";
   lightbox.style.height = "100%";

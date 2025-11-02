@@ -9,7 +9,6 @@ html, body {
     width: 100%;
     min-height: 100vh;
     font-family: 'Flavors', cursive;
-    background: radial-gradient(circle, rgb(133, 208, 167), rgb(127, 212, 223), rgb(130, 154, 222));
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -31,6 +30,7 @@ html, body {
 
 /* Lightbox content - fills overlay, grid centered inside */
 .lightbox-content {
+    background: radial-gradient(circle, rgb(133, 208, 167), rgb(127, 212, 223), rgb(130, 154, 222));
     background: #fff;
     border-radius: 0; /* no rounding so it kisses edges */
     width: 100%;
