@@ -1,4 +1,5 @@
 import { showLightbox } from "./showLightbox.js";
+import { puzzleSetup } from "./main.js";
 
 export async function fetchAndDisplayPuzzles() {
   const tableContainer = document.getElementById("page3");
@@ -111,33 +112,25 @@ export async function fetchAndDisplayPuzzles() {
       playBtn.addEventListener("mouseenter", () => (playBtn.style.backgroundColor = "#16a34a"));
       playBtn.addEventListener("mouseleave", () => (playBtn.style.backgroundColor = "#4ade80"));
 
-      playBtn.addEventListener("click", async () => {
-        // ✅ Open Lightbox and get content div reference
-        const lightboxContent = showLightbox();
+playBtn.addEventListener("click", async () => {
+  // Open lightbox and get content div
+  const lightboxContent = showLightbox();
+  lightboxContent.textContent = "Loading puzzle...";
 
-        try {
-          const res = await fetch(`http://localhost:3000/api/puzzles/${puzzle._id}`);
-          if (!res.ok) throw new Error("Failed to fetch puzzle");
-          const puzzleData = await res.json();
+  try {
+    const res = await fetch(`http://localhost:3000/api/puzzles/${puzzle._id}`);
+    if (!res.ok) throw new Error("Failed to fetch puzzle");
+    const puzzleData = await res.json();
 
-          // ✅ Insert formatted puzzle info
-          lightboxContent.innerHTML = `
-            <h2 style="margin-bottom: 10px;">${puzzleData.name}</h2>
-            <pre style="
-              background: #f5f5f5;
-              padding: 12px;
-              border-radius: 8px;
-              border: 1px solid #ccc;
-              font-size: 16px;
-              white-space: pre-wrap;
-              word-break: break-word;
-            ">${JSON.stringify(puzzleData, null, 2)}</pre>
-          `;
-        } catch (err) {
-          console.error("Error fetching puzzle:", err);
-          lightboxContent.textContent = "Error loading puzzle.";
-        }
-      });
+    // Pass the container to puzzleSetup
+    puzzleSetup(puzzleData, lightboxContent);
+
+  } catch (err) {
+    console.error("Error fetching puzzle:", err);
+    lightboxContent.textContent = "Error loading puzzle.";
+  }
+});
+
 
       actionCell.appendChild(playBtn);
       row.appendChild(actionCell);

@@ -1,6 +1,8 @@
 // showLightbox.js
 export function showLightbox() {
+  // Overlay that touches the whole screen
   const overlay = document.createElement("div");
+  overlay.classList.add("lightbox-overlay");
   overlay.style.position = "fixed";
   overlay.style.top = "0";
   overlay.style.left = "0";
@@ -8,42 +10,57 @@ export function showLightbox() {
   overlay.style.height = "100vh";
   overlay.style.background = "rgba(0, 0, 0, 0.7)";
   overlay.style.zIndex = "9999";
+  overlay.style.display = "flex";
+  overlay.style.justifyContent = "center";
+  overlay.style.alignItems = "center";
 
+  // Lightbox content
   const lightbox = document.createElement("div");
-  lightbox.style.position = "absolute";
-  lightbox.style.top = "20px";
-  lightbox.style.left = "10px";
-  lightbox.style.right = "10px";
-  lightbox.style.bottom = "20px";
+  lightbox.classList.add("lightbox-content");
+  lightbox.style.position = "relative"; // needed for absolute close button
   lightbox.style.background = "#fff";
-  lightbox.style.borderRadius = "8px";
+  lightbox.style.borderRadius = "0";
+  lightbox.style.width = "100%";
+  lightbox.style.height = "100%";
   lightbox.style.padding = "20px";
+  lightbox.style.boxSizing = "border-box";
   lightbox.style.display = "flex";
   lightbox.style.flexDirection = "column";
+  lightbox.style.alignItems = "center";
+  lightbox.style.justifyContent = "center";
+  lightbox.style.overflowY = "auto";
 
+  // Close button — positioned in top-right corner
   const closeBtn = document.createElement("button");
   closeBtn.textContent = "×";
-  closeBtn.style.alignSelf = "flex-end";
+  closeBtn.style.position = "absolute";
+  closeBtn.style.top = "10px";
+  closeBtn.style.right = "10px";
   closeBtn.style.fontSize = "28px";
   closeBtn.style.fontWeight = "bold";
   closeBtn.style.background = "none";
   closeBtn.style.border = "none";
   closeBtn.style.cursor = "pointer";
-
   closeBtn.addEventListener("click", () => overlay.remove());
 
-  // ✅ This is the area where puzzle content will go
+  // Puzzle grid container
   const content = document.createElement("div");
-  content.style.flex = "1";
-  content.style.overflowY = "auto";
-  content.style.padding = "10px";
+  content.id = "puzzleGridContainer";
+  content.style.display = "grid";
+  content.style.gap = "20px";
+  content.style.justifyContent = "center"; // center horizontally
+  content.style.alignContent = "center";   // center vertically
+  content.style.width = "max-content";     // shrink to fit cards
+  content.style.margin = "0 auto";         // center container
 
+  // Append elements
   lightbox.appendChild(closeBtn);
   lightbox.appendChild(content);
   overlay.appendChild(lightbox);
   document.body.appendChild(overlay);
 
-  return content; // ✅ Return reference so we can insert puzzle data later
+  return content; // reference for inserting the puzzle grid
 }
+
 
 

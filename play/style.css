@@ -1,0 +1,112 @@
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Chewy&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Flavors&display=swap');
+
+/* Body & background */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    font-family: 'Flavors', cursive;
+    background: radial-gradient(circle, rgb(133, 208, 167), rgb(127, 212, 223), rgb(130, 154, 222));
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* Lightbox overlay - touches edges of screen */
+.lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Lightbox content - fills overlay, grid centered inside */
+.lightbox-content {
+    background: #fff;
+    border-radius: 0; /* no rounding so it kisses edges */
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;      /* horizontal centering of grid */
+    justify-content: center;  /* optional vertical centering of grid */
+    overflow-y: auto;
+}
+
+/* Puzzle grid container */
+#puzzleGridContainer {
+    display: grid;
+    gap: 20px;
+    justify-content: center; /* center cells in each row */
+    align-content: center;   /* center rows inside container */
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    width: max-content;      /* shrink container to fit content */
+    margin: 0 auto;          /* center container horizontally */
+}
+
+/* Cards / cells */
+.cell {
+    width: 120px;
+    height: 120px;
+    font-size: 2rem;
+    border: 2px solid #888;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(228, 219, 255);
+    cursor: pointer;
+    transition: transform 0.3s ease, background 0.3s ease;
+    user-select: none;
+}
+
+.cell:hover {
+    transform: scale(1.05);
+    background-color: rgb(208, 223, 228);
+}
+
+.cell.face-up {
+    background-color: #fff;
+}
+
+.cell.matched {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+/* Images inside cards */
+.cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Text inside cards */
+.cell p {
+    margin: 0;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+/* Close button for lightbox */
+.lightbox-content button {
+    font-size: 28px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    align-self: flex-end;
+}
