@@ -28,40 +28,36 @@ html, body {
     align-items: center;
 }
 
-/* Lightbox content - fills overlay, grid centered inside */
 .lightbox-content {
-    background: radial-gradient(circle, rgb(133, 208, 167), rgb(127, 212, 223), rgb(130, 154, 222));
-    background: #fff;
-    border-radius: 0; /* no rounding so it kisses edges */
-    width: 100%;
-    height: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;      /* horizontal centering of grid */
-    justify-content: center;  /* optional vertical centering of grid */
-    overflow-y: auto;
+  justify-content: flex-start; /* already applied */
+  padding-top: 10px; /* reduce top gap further */
+  padding-bottom: 10px; /* reduce bottom gap */
 }
 
 /* Puzzle grid container */
 #puzzleGridContainer {
     display: grid;
-    gap: 20px;
-    justify-content: center; /* center cells in each row */
-    align-content: center;   /* center rows inside container */
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    width: max-content;      /* shrink container to fit content */
-    margin: 0 auto;          /* center container horizontally */
+    gap: 2.5vmin;
+    justify-content: center;
+    align-content: center;
+
+    /* Increase maximum scaling area */
+    grid-template-columns: repeat(auto-fit, minmax(min(26vmin, 240px), 1fr));
+
+    max-height: 85vh;
+    margin-top: 2vmin;
+    margin-bottom: 2vmin;
+    width: 95vmin;
+    max-width: 95%;
 }
 
 /* Cards / cells */
 .cell {
-    width: 120px;
-    height: 120px;
-    font-size: 2rem;
-    border: 2px solid #888;
-    border-radius: 12px;
+    width: min(26vmin, 240px);
+    height: min(26vmin, 240px);
+    font-size: calc(min(26vmin, 240px) * 0.45);
+    border: 3px solid #777;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -97,7 +93,7 @@ html, body {
 /* Text inside cards */
 .cell p {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 3rem;
     text-align: center;
 }
 
