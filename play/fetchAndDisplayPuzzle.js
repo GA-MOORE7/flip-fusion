@@ -1,6 +1,5 @@
 import { showLightbox } from "./showLightbox.js";
 
-// play/fetchAndDisplayPuzzle.js
 export async function fetchAndDisplayPuzzles() {
   const tableContainer = document.getElementById("page3");
   if (!tableContainer) return;
@@ -19,10 +18,8 @@ export async function fetchAndDisplayPuzzles() {
       return;
     }
 
-    // Clear existing content
     tableContainer.innerHTML = "";
 
-    // Create table
     const table = document.createElement("table");
     table.style.width = "100%";
     table.style.borderCollapse = "separate";
@@ -31,7 +28,6 @@ export async function fetchAndDisplayPuzzles() {
     table.style.overflow = "hidden";
     table.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
 
-    // Header
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
     ["Puzzle Name", "Preview", "Action"].forEach((text) => {
@@ -48,7 +44,6 @@ export async function fetchAndDisplayPuzzles() {
     thead.appendChild(headerRow);
     table.appendChild(thead);
 
-    // Body
     const tbody = document.createElement("tbody");
 
     puzzles.forEach((puzzle) => {
@@ -57,14 +52,12 @@ export async function fetchAndDisplayPuzzles() {
       row.addEventListener("mouseenter", () => (row.style.backgroundColor = "#f0fdf9"));
       row.addEventListener("mouseleave", () => (row.style.backgroundColor = "transparent"));
 
-      // Puzzle Name
       const nameCell = document.createElement("td");
       nameCell.textContent = puzzle.name;
       nameCell.style.padding = "10px";
       nameCell.style.fontWeight = "500";
       row.appendChild(nameCell);
 
-      // Preview
       const previewCell = document.createElement("td");
       previewCell.style.padding = "10px";
       previewCell.style.display = "flex";
@@ -88,7 +81,6 @@ export async function fetchAndDisplayPuzzles() {
         img.style.borderRadius = "8px";
         img.style.border = "1px solid #ddd";
         img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
-        img.onerror = () => (img.alt = item.word || "Image unavailable");
 
         const label = document.createElement("span");
         label.textContent = item.word;
@@ -103,7 +95,6 @@ export async function fetchAndDisplayPuzzles() {
 
       row.appendChild(previewCell);
 
-      // Action Button
       const actionCell = document.createElement("td");
       actionCell.style.padding = "10px";
 
@@ -121,28 +112,41 @@ export async function fetchAndDisplayPuzzles() {
       playBtn.addEventListener("mouseleave", () => (playBtn.style.backgroundColor = "#4ade80"));
 
       playBtn.addEventListener("click", async () => {
-        // Show lightbox immediately
-        showLightbox();
+        // ✅ Open Lightbox and get content div reference
+        const lightboxContent = showLightbox();
 
-        // Fetch the puzzle data
         try {
           const res = await fetch(`http://localhost:3000/api/puzzles/${puzzle._id}`);
           if (!res.ok) throw new Error("Failed to fetch puzzle");
           const puzzleData = await res.json();
-          console.log("Puzzle data retrieved:", puzzleData);
+
+          // ✅ Insert formatted puzzle info
+          lightboxContent.innerHTML = `
+            <h2 style="margin-bottom: 10px;">${puzzleData.name}</h2>
+            <pre style="
+              background: #f5f5f5;
+              padding: 12px;
+              border-radius: 8px;
+              border: 1px solid #ccc;
+              font-size: 16px;
+              white-space: pre-wrap;
+              word-break: break-word;
+            ">${JSON.stringify(puzzleData, null, 2)}</pre>
+          `;
         } catch (err) {
           console.error("Error fetching puzzle:", err);
+          lightboxContent.textContent = "Error loading puzzle.";
         }
       });
 
       actionCell.appendChild(playBtn);
       row.appendChild(actionCell);
-
       tbody.appendChild(row);
     });
 
     table.appendChild(tbody);
     tableContainer.appendChild(table);
+
   } catch (err) {
     console.error("Error fetching puzzles:", err);
     const p = document.createElement("p");
@@ -153,7 +157,6 @@ export async function fetchAndDisplayPuzzles() {
   }
 }
 
-// Automatically run on page load
 document.addEventListener("DOMContentLoaded", () => {
   fetchAndDisplayPuzzles();
 });
