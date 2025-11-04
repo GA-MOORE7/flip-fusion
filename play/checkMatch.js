@@ -17,7 +17,7 @@ function checkMatch(clickedCells) {
 
             first.el.classList.remove("face-up");
             second.el.classList.remove("face-up");
-        }, 500);
+        }, 750);
     }
 }
 
