@@ -30,7 +30,7 @@ function addSaveButton() {
   saveButton.style.padding = "12px 22px";
   saveButton.style.border = "none";
   saveButton.style.borderRadius = "12px";
-  saveButton.style.opacity = "0.50";
+  saveButton.style.opacity = "0.5";
   saveButton.style.background = "linear-gradient(135deg, #97baf3ff, #2563eb)";
   saveButton.style.color = "white";
   saveButton.style.fontSize = "16px";
@@ -40,37 +40,39 @@ function addSaveButton() {
   saveButton.style.whiteSpace = "nowrap";
   saveButton.style.boxShadow = "0 4px 10px rgba(37, 99, 235, 0.3)";
   saveButton.style.transition = "all 0.25s ease";
-  saveButton.style.transform = "translateY(0)";
+  saveButton.style.transform = "scale(1)";
   saveButton.style.backdropFilter = "blur(4px)";
+
+  // 🔒 Ensure button is always clickable above Croppie
+  saveButton.style.position = "relative";
+  saveButton.style.zIndex = "10";
 
   // --- Hover effect ---
   saveButton.addEventListener("mouseenter", () => {
     saveButton.style.background = "linear-gradient(135deg, #2563eb, #1d4ed8)";
     saveButton.style.boxShadow = "0 6px 14px rgba(37, 99, 235, 0.4)";
-    saveButton.style.transform = "translateY(-2px)";
-    saveButton.style.opacity = "100%";
+    saveButton.style.transform = "scale(1.03)";
+    saveButton.style.opacity = "1";
   });
 
-  // --- Leave effect ---
   saveButton.addEventListener("mouseleave", () => {
     saveButton.style.background = "linear-gradient(135deg, #3b82f6, #2563eb)";
     saveButton.style.boxShadow = "0 4px 10px rgba(37, 99, 235, 0.3)";
-    saveButton.style.transform = "translateY(0)";
+    saveButton.style.transform = "scale(1)";
   });
 
-  // --- Press animation ---
-  saveButton.addEventListener("mousedown", () => {
-    saveButton.style.transform = "translateY(1px)";
+  // --- Press animation (Mac-safe) ---
+  saveButton.addEventListener("pointerdown", () => {
+    saveButton.style.transform = "scale(0.97)";
     saveButton.style.boxShadow = "0 2px 6px rgba(37, 99, 235, 0.25)";
   });
 
-  saveButton.addEventListener("mouseup", () => {
-    saveButton.style.transform = "translateY(-2px)";
+  saveButton.addEventListener("pointerup", () => {
+    saveButton.style.transform = "scale(1.03)";
     saveButton.style.boxShadow = "0 6px 14px rgba(37, 99, 235, 0.4)";
-    saveButton.textContent = "Save Cropped Image + Word";
-});
+  });
 
-  // --- Click behavior placeholder ---
+  // --- Click behavior ---
   saveButton.addEventListener("click", () => {
     console.log("Save button clicked! Ready to capture image + word.");
     // TODO: add logic to get cropped image + associated word
@@ -81,3 +83,4 @@ function addSaveButton() {
 }
 
 export { addSaveButton };
+
