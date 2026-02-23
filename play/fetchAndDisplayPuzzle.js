@@ -10,6 +10,7 @@ export async function fetchAndDisplayPuzzles() {
     if (!response.ok) throw new Error("Failed to fetch puzzles");
 
     const puzzles = await response.json();
+
     if (puzzles.length === 0) {
       const p = document.createElement("p");
       p.textContent = "No puzzles available.";
@@ -29,9 +30,11 @@ export async function fetchAndDisplayPuzzles() {
     table.style.overflow = "hidden";
     table.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
 
+    /* ---------- HEADER ---------- */
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
-    ["Puzzle Name", "Preview", "Action"].forEach((text) => {
+
+    ["Puzzle Name", "Preview", "Action", "Delete"].forEach((text) => {
       const th = document.createElement("th");
       th.textContent = text;
       th.style.borderBottom = "2px solid #ccc";
@@ -42,23 +45,31 @@ export async function fetchAndDisplayPuzzles() {
       th.style.color = "#333";
       headerRow.appendChild(th);
     });
+
     thead.appendChild(headerRow);
     table.appendChild(thead);
 
+    /* ---------- BODY ---------- */
     const tbody = document.createElement("tbody");
 
     puzzles.forEach((puzzle) => {
       const row = document.createElement("tr");
       row.style.transition = "background 0.2s";
-      row.addEventListener("mouseenter", () => (row.style.backgroundColor = "#f0fdf9"));
-      row.addEventListener("mouseleave", () => (row.style.backgroundColor = "transparent"));
+      row.addEventListener("mouseenter", () => {
+        row.style.backgroundColor = "#f0fdf9";
+      });
+      row.addEventListener("mouseleave", () => {
+        row.style.backgroundColor = "transparent";
+      });
 
+      /* --- NAME CELL --- */
       const nameCell = document.createElement("td");
       nameCell.textContent = puzzle.name;
       nameCell.style.padding = "10px";
       nameCell.style.fontWeight = "500";
       row.appendChild(nameCell);
 
+      /* --- PREVIEW CELL --- */
       const previewCell = document.createElement("td");
       previewCell.style.padding = "10px";
       previewCell.style.display = "flex";
@@ -96,6 +107,7 @@ export async function fetchAndDisplayPuzzles() {
 
       row.appendChild(previewCell);
 
+      /* --- ACTION (PLAY) CELL --- */
       const actionCell = document.createElement("td");
       actionCell.style.padding = "10px";
 
@@ -109,37 +121,86 @@ export async function fetchAndDisplayPuzzles() {
       playBtn.style.borderRadius = "6px";
       playBtn.style.border = "none";
       playBtn.style.transition = "background 0.2s";
-      playBtn.addEventListener("mouseenter", () => (playBtn.style.backgroundColor = "#16a34a"));
-      playBtn.addEventListener("mouseleave", () => (playBtn.style.backgroundColor = "#4ade80"));
 
-playBtn.addEventListener("click", async () => {
-  // Open lightbox and get content div
-  const lightboxContent = showLightbox();
-  lightboxContent.textContent = "Loading puzzle...";
+      playBtn.addEventListener("mouseenter", () => {
+        playBtn.style.backgroundColor = "#16a34a";
+      });
+      playBtn.addEventListener("mouseleave", () => {
+        playBtn.style.backgroundColor = "#4ade80";
+      });
 
-  try {
-    const res = await fetch(`http://localhost:3000/api/puzzles/${puzzle._id}`);
-    if (!res.ok) throw new Error("Failed to fetch puzzle");
-    const puzzleData = await res.json();
+      playBtn.addEventListener("click", async () => {
+        const lightboxContent = showLightbox();
+        lightboxContent.textContent = "Loading puzzle...";
 
-    // Pass the container to puzzleSetup
-    puzzleSetup(puzzleData, lightboxContent);
+        try {
+          const res = await fetch(
+            `http://localhost:3000/api/puzzles/${puzzle._id}`
+          );
+          if (!res.ok) throw new Error("Failed to fetch puzzle");
 
-  } catch (err) {
-    console.error("Error fetching puzzle:", err);
-    lightboxContent.textContent = "Error loading puzzle.";
-  }
-});
-
+          const puzzleData = await res.json();
+          puzzleSetup(puzzleData, lightboxContent);
+        } catch (err) {
+          console.error("Error fetching puzzle:", err);
+          lightboxContent.textContent = "Error loading puzzle.";
+        }
+      });
 
       actionCell.appendChild(playBtn);
       row.appendChild(actionCell);
+
+      /* --- DELETE CELL --- */
+      const deleteCell = document.createElement("td");
+      deleteCell.style.padding = "10px";
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "Delete";
+      deleteBtn.style.padding = "6px 14px";
+      deleteBtn.style.cursor = "pointer";
+      deleteBtn.style.backgroundColor = "#ef4444";
+      deleteBtn.style.color = "#fff";
+      deleteBtn.style.fontWeight = "500";
+      deleteBtn.style.borderRadius = "6px";
+      deleteBtn.style.border = "none";
+      deleteBtn.style.transition = "background 0.2s";
+
+      deleteBtn.addEventListener("mouseenter", () => {
+        deleteBtn.style.backgroundColor = "#b91c1c";
+      });
+      deleteBtn.addEventListener("mouseleave", () => {
+        deleteBtn.style.backgroundColor = "#ef4444";
+      });
+
+      deleteBtn.addEventListener("click", async () => {
+        const confirmed = confirm(
+          `Delete "${puzzle.name}"?\nThis cannot be undone.`
+        );
+        if (!confirmed) return;
+
+        try {
+          const res = await fetch(
+            `http://localhost:3000/api/puzzles/${puzzle._id}`,
+            { method: "DELETE" }
+          );
+
+          if (!res.ok) throw new Error("Failed to delete puzzle");
+
+          row.remove();
+        } catch (err) {
+          console.error("Delete error:", err);
+          alert("Error deleting puzzle.");
+        }
+      });
+
+      deleteCell.appendChild(deleteBtn);
+      row.appendChild(deleteCell);
+
       tbody.appendChild(row);
     });
 
     table.appendChild(tbody);
     tableContainer.appendChild(table);
-
   } catch (err) {
     console.error("Error fetching puzzles:", err);
     const p = document.createElement("p");
