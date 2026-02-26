@@ -1,3 +1,5 @@
+import { fetchAndDisplayPuzzles } from "../play/fetchAndDisplayPuzzle.js";
+
 export async function sendPuzzleToAPI(name, items) {
   if (!name || !items || items.length === 0) {
     alert("Please provide a puzzle name and at least one item.");
@@ -15,6 +17,7 @@ export async function sendPuzzleToAPI(name, items) {
 
     if (!response.ok) {
       let errorMessage = "Failed to create puzzle";
+
       if (contentType && contentType.includes("application/json")) {
         const errorData = await response.json();
         errorMessage = errorData.error || errorMessage;
@@ -22,16 +25,21 @@ export async function sendPuzzleToAPI(name, items) {
         const text = await response.text();
         console.error("Server returned non-JSON response:", text);
       }
+
       throw new Error(errorMessage);
     }
 
-    // Parse response JSON
-    const data = contentType && contentType.includes("application/json")
-      ? await response.json()
-      : null;
+    // Parse response JSON (if returned)
+    const data =
+      contentType && contentType.includes("application/json")
+        ? await response.json()
+        : null;
 
     console.log("Puzzle saved successfully:", data);
     alert("Puzzle saved successfully!");
+
+    // ✅ Refresh the puzzle list immediately
+    await fetchAndDisplayPuzzles();
 
     return data;
   } catch (err) {
