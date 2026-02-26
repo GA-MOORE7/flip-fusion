@@ -11,13 +11,18 @@ function displaySavedItems(savedItems) {
   let existingTable = document.getElementById("savedItemsTable");
   if (existingTable) existingTable.remove();
 
-  // Create wrapper for table
+  // Create wrapper for table (SCROLLABLE)
   const tableWrapper = document.createElement("div");
   tableWrapper.id = "savedItemsTable";
   tableWrapper.style.marginTop = "20px";
   tableWrapper.style.width = "100%";
   tableWrapper.style.display = "flex";
   tableWrapper.style.justifyContent = "center";
+  tableWrapper.style.maxHeight = "300px";       // ✅ prevents page overflow
+  tableWrapper.style.overflowY = "auto";        // ✅ enables scrolling
+  tableWrapper.style.overflowX = "hidden";
+  tableWrapper.style.borderRadius = "12px";
+  tableWrapper.style.pointerEvents = "auto";
 
   // Create table
   const table = document.createElement("table");
@@ -26,7 +31,6 @@ function displaySavedItems(savedItems) {
   table.style.margin = "0 auto";
   table.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
   table.style.borderRadius = "10px";
-  table.style.overflow = "hidden";
   table.style.backgroundColor = "#fefefe";
   table.style.fontFamily = "Arial, sans-serif";
 
@@ -38,6 +42,9 @@ function displaySavedItems(savedItems) {
     th.style.padding = "10px";
     th.style.backgroundColor = "#6dece2ff";
     th.style.borderBottom = "2px solid #ddd";
+    th.style.position = "sticky";   // ✅ keeps header visible when scrolling
+    th.style.top = "0";
+    th.style.zIndex = "1";
     header.appendChild(th);
   });
   table.appendChild(header);
@@ -46,8 +53,13 @@ function displaySavedItems(savedItems) {
   savedItems.forEach((item, index) => {
     const row = document.createElement("tr");
     row.style.transition = "background-color 0.2s";
-    row.addEventListener("mouseenter", () => (row.style.backgroundColor = "#f0f9ff"));
-    row.addEventListener("mouseleave", () => (row.style.backgroundColor = "white"));
+
+    row.addEventListener("mouseenter", () => {
+      row.style.backgroundColor = "#f0f9ff";
+    });
+    row.addEventListener("mouseleave", () => {
+      row.style.backgroundColor = "white";
+    });
 
     const numCell = document.createElement("td");
     numCell.textContent = index + 1;
@@ -60,14 +72,16 @@ function displaySavedItems(savedItems) {
     wordCell.style.padding = "8px";
 
     const imgCell = document.createElement("td");
+    imgCell.style.textAlign = "center";
+    imgCell.style.padding = "8px";
+
     const img = document.createElement("img");
     img.src = item.image;
     img.style.width = "60px";
     img.style.height = "60px";
     img.style.borderRadius = "8px";
     img.style.objectFit = "cover";
-    imgCell.style.textAlign = "center";
-    imgCell.style.padding = "8px";
+
     imgCell.appendChild(img);
 
     [numCell, wordCell, imgCell].forEach(cell => {
@@ -84,8 +98,13 @@ function displaySavedItems(savedItems) {
 
   // Place table before frame
   const frameWrapper = document.getElementById("frameWrapper");
-  if (frameWrapper) frameContainer.insertBefore(tableWrapper, frameWrapper);
-  else frameContainer.appendChild(tableWrapper);
+  if (frameWrapper) {
+    frameContainer.insertBefore(tableWrapper, frameWrapper);
+    frameWrapper.style.position = "relative";
+    frameWrapper.style.zIndex = "10"; // ✅ ensures clickability
+  } else {
+    frameContainer.appendChild(tableWrapper);
+  }
 
   // Vertical stack alignment
   frameContainer.style.display = "flex";
@@ -107,7 +126,7 @@ function displaySavedItems(savedItems) {
     }
   }
 
-  // ✅ Automatically trigger button creation
+  // Auto-create action button
   createActionButton();
 }
 
