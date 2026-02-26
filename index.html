@@ -3,22 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="ui/ui.css" />
   <link rel="stylesheet" href="create/style.css" />
   <link rel="stylesheet" href="play/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/croppie/croppie.css" />
 
-<link rel="stylesheet" href="https://unpkg.com/croppie/croppie.css" />
-<script src="https://unpkg.com/croppie/croppie.js"></script>
-
-
+  <!-- Scripts -->
+  <script src="https://unpkg.com/croppie/croppie.js"></script>
   <script src="ui/ui.js" defer></script>
   <script type="module" src="create/main.js" defer></script>
   <script type="module" src="play/fetchAndDisplayPuzzle.js" defer></script>
   <script type="module" src="play/main.js" defer></script>
+
   <title>Toggle Navigation</title>
 </head>
 <body>
 
+  <!-- Preload match sound -->
+  <audio id="matchSound" src="play/sounds/match.mp3" preload="auto"></audio>
+
+  <!-- Toggle Navigation -->
   <div class="toggle-wrapper">
     <div class="slider"></div>
     <button class="toggle-btn" id="toggle-btn-1" data-page="page1">Home</button>
@@ -26,39 +32,36 @@
     <button class="toggle-btn" id="toggle-btn-3" data-page="page3">Play</button>
   </div>
 
+  <!-- Pages -->
   <div class="main-pages">
     <div id="page1" class="page">Welcome to Home</div>
+
     <div id="page2" class="page">
-      
-          <div id="wrapper">
-      <div id="frameContainer">
+      <div id="wrapper">
+        <div id="frameContainer"></div>
 
+        <div id="croppingContainer">
+          <!-- Placeholder image (visible initially) -->
+          <img
+            id="croppableImage"
+            src="create/images/placeholder.jpg"
+            alt="Placeholder Image"
+            class="placeholder"
+            style="display: block; max-width: 300px; margin-top: 20px; border-radius: 10px;"
+          />
+
+          <!-- Cropped preview (hidden until cropping happens) -->
+          <img
+            id="previewImage"
+            alt="Cropped Preview"
+            style="display: none; max-width: 80%; margin-top: 20px;"
+          />
+        </div>
+
+        <input type="file" id="fileInput" accept="image/*" style="display: none;" />
       </div>
-
-<div id="croppingContainer">
-  <!-- Placeholder image (visible initially) -->
-  <img
-    id="croppableImage"
-    src="create/images/placeholder.jpg"
-    alt="Placeholder Image"
-    class="placeholder"
-    style="display: block; max-width: 300px; margin-top: 20px; border-radius: 10px;"
-  />
-
-  <!-- Cropped preview (hidden until cropping happens) -->
-  <img
-    id="previewImage"
-    alt="Cropped Preview"
-    style="display: none; max-width: 80%; margin-top: 20px;"
-  />
-</div>
-
-
-
-
-      <input type="file" id="fileInput" accept="image/*" style="display: none;" />
     </div>
-    </div>
+
     <div id="page3" class="page">
       <div id="puzzleGridContainer"></div>
     </div>
