@@ -83,7 +83,7 @@ export async function fetchAndDisplayPuzzles() {
       previewCell.style.gap = "10px";
       previewCell.style.flexWrap = "wrap";
 
-      puzzle.items.slice(0, 3).forEach((item) => {
+      puzzle.items.forEach((item) => {
         const img = document.createElement("img");
         img.src = item.imageUrl || item.image;
         img.alt = item.word;
