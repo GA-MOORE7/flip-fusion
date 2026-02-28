@@ -7,7 +7,7 @@ export async function sendPuzzleToAPI(name, items) {
   }
 
   try {
-    const response = await fetch("http://localhost:3000/api/puzzles", {
+    const response = await fetch("https://flip-and-match-api-c1b1b2b47d88.herokuapp.com/api/puzzles", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, items }) // items = savedItems

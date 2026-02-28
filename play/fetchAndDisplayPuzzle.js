@@ -6,7 +6,7 @@ export async function fetchAndDisplayPuzzles() {
   if (!tableContainer) return;
 
   try {
-    const response = await fetch("http://localhost:3000/api/puzzles");
+    const response = await fetch("https://flip-and-match-api-c1b1b2b47d88.herokuapp.com/api/puzzles");
     if (!response.ok) throw new Error("Failed to fetch puzzles");
 
     const puzzles = await response.json();
@@ -112,7 +112,7 @@ export async function fetchAndDisplayPuzzles() {
       playBtn.addEventListener("click", async () => {
         const lightboxContent = showLightbox();
         lightboxContent.textContent = "Loading puzzle...";
-        const res = await fetch(`http://localhost:3000/api/puzzles/${puzzle._id}`);
+        const res = await fetch(`https://flip-and-match-api-c1b1b2b47d88.herokuapp.com/api/puzzles/${puzzle._id}`);
         const puzzleData = await res.json();
         puzzleSetup(puzzleData, lightboxContent);
       });
@@ -134,7 +134,7 @@ export async function fetchAndDisplayPuzzles() {
 
       deleteBtn.addEventListener("click", async () => {
         if (!confirm(`Delete "${puzzle.name}"?`)) return;
-        await fetch(`http://localhost:3000/api/puzzles/${puzzle._id}`, {
+        await fetch(`https://flip-and-match-api-c1b1b2b47d88.herokuapp.com/api/puzzles/${puzzle._id}`, {
           method: "DELETE",
         });
         row.remove();
